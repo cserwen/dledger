@@ -805,7 +805,11 @@ public class DLedgerEntryPusher {
             response.setCode(code);
             response.setTerm(request.getTerm());
             if (request.getType() != PushEntryRequest.Type.COMMIT) {
-                response.setIndex(request.getEntry().getIndex());
+                if (request.isBatch()) {
+                    response.setIndex(request.getFirstEntryIndex());
+                } else {
+                    response.setIndex(request.getEntry().getIndex());
+                }
             }
             response.setBeginIndex(dLedgerStore.getLedgerBeginIndex());
             response.setEndIndex(dLedgerStore.getLedgerEndIndex());
